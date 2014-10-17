@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
 
-from Reports.models import Weekly_report, Hourly_report
+from Reports.models import Weekly_report
 
 class ReportView(generic.ListView):
 	template_name = 'Reports/reports.html'
@@ -16,7 +16,3 @@ class DetailView(generic.DetailView):
 	template_name = 'Reports/detail.html'
 
 	context_object_name = 'report'
-
-class HoursView(generic.DetailView):
-	model = Hourly_report
-	

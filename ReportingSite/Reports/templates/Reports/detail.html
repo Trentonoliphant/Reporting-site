@@ -1,18 +1,26 @@
-<head><h1>{{ report }}</h1></head>
+<head><h1>Hours for Week</h1></head>
 <body>
 	<table border='1'>
-		<td></td>
-		{% for project in report.Project.all %}
+	<tr>
+		<th>Employee</th>
+		<th>Project</th>
+		<th>Hours</th>
+	</tr>
+<!-- 		{% for project in report.Project.all %}
 			<th>{{ project }}</th>
 		{% endfor %}
-
+ -->
 		<!--loop over each row-->
-		{% for employee in report.Employee.all %}
+		{% for hours in report %}
 		<tr>
-			<td>{{employee}}</td>
+			<td>{{hours.Employee.employee_name}}</td>
+			<td>{{hours.Project.project_name}}</td>
+			<td>{{hours.Hours}}</td>
+
+		</tr>
 			
 			<!-- loop over each hour report for the current employee -->
-			{% for hour_set in employee.hours_report_set.all %}
+<!-- 			{% for hour_set in employee.hours_report_set.all %}
 				{%if hour_set.Week_of == report.reporting_week%}
 					{% for project in report.Project.all %}
 						{%if project.id == hour_set.Project.id%}
@@ -25,7 +33,7 @@
 			{% endfor %}
 			
 		</tr>
-		{% endfor %}
+ -->		{% endfor %}
 
 	</table>
 </body>

@@ -1,0 +1,31 @@
+<head><h1>{{ report }}</h1></head>
+<body>
+	<table border='1'>
+		<td></td>
+		{% for project in report.Project.all %}
+			<th>{{ project }}</th>
+		{% endfor %}
+
+		<!--loop over each row-->
+		{% for employee in report.Employee.all %}
+		<tr>
+			<td>{{employee}}</td>
+			
+			<!-- loop over each hour report for the current employee -->
+			{% for hour_set in employee.hours_report_set.all %}
+				{%if hour_set.Week_of == report.reporting_week%}
+					{% for project in report.Project.all %}
+						{%if project.id == hour_set.Project.id%}
+							<td>{{ hour_set.Project }}</td>
+						{%else%}
+							<td>0</td>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+			
+		</tr>
+		{% endfor %}
+
+	</table>
+</body>

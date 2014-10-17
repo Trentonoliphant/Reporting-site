@@ -1,0 +1,12 @@
+<head>
+	<h1>Reports list</h1>
+</head>
+
+<body>
+	{% for report in reports_list %}
+		
+		<ul><a href = "{% url 'reports:detail' report.id %}">{{ report }}</a></ul>
+	
+	{% endfor %}
+	
+</body>

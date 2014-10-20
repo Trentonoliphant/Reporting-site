@@ -1,34 +1,51 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.utils import timezone
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
-from Reports.models import Weekly_report, Hours_report
+from Reports.models import Employee, Project
 
-class ReportView(generic.ListView):
-	template_name = 'Reports/reports.html'
-	context_object_name = 'reports_list'
+class ProjectsView(generic.ListView):
+	template_name = 'Reports/projects.html'
+	context_object_name = 'projects_list'
 
 	def get_queryset(self):
-		return Weekly_report.objects.all()
+		return Project.objects.all()
 
-class DetailView(generic.ListView):
-	model = Hours_report
+class DetailView(generic.DetailView):
+	model = Project
 	template_name = 'Reports/detail.html'
 
-	context_object_name = 'report'
+	context_object_name = 'project'
 
-	def get_queryset(self):
-		weeks = {'4':'2014-10-01','3':'2014-10-14'}
+	#def get_queryset(self):
+	#	weeks = {'4':'2014-10-01','3':'2014-10-14'}
 
-		week = weeks[self.kwargs['pk']]
-		return Hours_report.objects.filter(Week_of=week).order_by('Employee')
+	#	week = weeks[self.kwargs['pk']]
+	#	return .objects.filter(Week_of=week).order_by('Employee')
 
+class EditView(generic.DetailView):
+	model = Project
+	template_name = 'Reports/edit.html'
+	context_object_name = 'project'
 
-def get_week(request, year, month, day):
-	date = "{}-{}-{}".format(year,month,day)
+	def get_context_data(self, **kwargs):
+		ctx = super(EditView, self).get_context_data(**kwargs)
+		ctx['employee_list'] = Employee.objects.all()
+		return ctx
 
-	hours = Hours_report.objects.filter(Week_of=date)
+def Submit(request, project_id):
+	p = get_object_or_404(Project, pk = project_id)
+	choices = p.Employee.get(pk=request.POST['employee'])
+	for choice in choices:
+		project.Employee.add(choice)
+	return HttpResponseRedirect(reverse('reports:edit', args=(project_id,)))
+#def get_week(request, year, month, day):
+#	date = "{}-{}-{}".format(year,month,day)
 
-	output={'hours':hours}
+#	hours = Hours_report.objects.filter(Week_of=date)
 
-	return render()
+#	output={'hours':hours}
+
+#	return render()

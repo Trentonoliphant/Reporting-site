@@ -1,39 +1,18 @@
-<head><h1>Hours for Week</h1></head>
+<head><h1>Employees assigned to project {{ project }}</h1></head>
 <body>
-	<table border='1'>
-	<tr>
-		<th>Employee</th>
-		<th>Project</th>
-		<th>Hours</th>
-	</tr>
-<!-- 		{% for project in report.Project.all %}
-			<th>{{ project }}</th>
-		{% endfor %}
- -->
-		<!--loop over each row-->
-		{% for hours in report %}
-		<tr>
-			<td>{{hours.Employee.employee_name}}</td>
-			<td>{{hours.Project.project_name}}</td>
-			<td>{{hours.Hours}}</td>
 
-		</tr>
-			
-			<!-- loop over each hour report for the current employee -->
-<!-- 			{% for hour_set in employee.hours_report_set.all %}
-				{%if hour_set.Week_of == report.reporting_week%}
-					{% for project in report.Project.all %}
-						{%if project.id == hour_set.Project.id%}
-							<td>{{ hour_set.Project }}</td>
-						{%else%}
-							<td>0</td>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
-			{% endfor %}
-			
-		</tr>
- -->		{% endfor %}
+	{% for employee in project.Employee.all %}
+		<td>{{ employee }}</td>
+	{% empty %}
+		<p>There are no Employees assigned to this project right now.</p>
+	{% endfor %}
 
-	</table>
+
+	<form action = "{% url 'reports:projects' %}">
+		<input type = "submit" value = 'Back'/>	
+	</form>
+
+	<form action = "{% url 'reports:edit' project.id %}">
+		<input type = "submit" value = 'Add employee to project'/>	
+	</form>
 </body>

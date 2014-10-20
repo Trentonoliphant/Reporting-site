@@ -1,0 +1,21 @@
+<body>
+Editing Project {{ project }}
+
+
+<form action = "{% url 'reports:submit' project.id %}" method = 'post'>
+	{% csrf_token %}
+	{{project.Employee.all}}
+	{% for employee in employee_list %}
+		{% if employee in project.Employee.all %}
+		<input type = "checkbox" checked = 'checked'name = "employee" id="employee{{ forloop.counter }}" value = "{{employee.id}}"/>{{employee.Employee_name}}<br>
+		{% else %}
+				<input type = "checkbox" name = "employee" id="employee{{ forloop.counter }}" value = "{{employee.id}}"/>{{employee.Employee_name}}<br>
+		{% endif %}
+	{% endfor %}
+	<input type = "Submit" value = "Submit"/>
+</form>
+
+<form action= "{%url 'reports:detail' project.id %}"/>
+	<input type= "Submit" value = "Back">
+</form>
+</body>

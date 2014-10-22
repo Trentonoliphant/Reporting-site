@@ -1,15 +1,20 @@
 <body>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+	
 Editing Project {{ project }}
 
 
 <form action = "{% url 'reports:submit' project.id %}" method = 'post'>
 	{% csrf_token %}
-	{{project.Employee.all}}
 	{% for employee in employee_list %}
 		{% if employee in project.Employee.all %}
-		<input type = "checkbox" checked = 'checked'name = "employee" id="employee{{ forloop.counter }}" value = "{{employee.id}}"/>{{employee.Employee_name}}<br>
+		<input type="checkbox" checked='checked' name = "p_employee" id="p_employee{{ forloop.counter }}" value="{{p_employee.id}}"/>
+		{{employee.Employee_name}}<br>
+		
 		{% else %}
-				<input type = "checkbox" name = "employee" id="employee{{ forloop.counter }}" value = "{{employee.id}}"/>{{employee.Employee_name}}<br>
+				<input type ="checkbox" name ="employee" id="employee{{ forloop.counter }}" value="{{employee.id}}"/>
+				{{employee.Employee_name}}<br>
 		{% endif %}
 	{% endfor %}
 	<input type = "Submit" value = "Submit"/>

@@ -1,18 +1,23 @@
-<head><h1>Employees assigned to project {{ project }}</h1></head>
-<body>
+<table border = '1'>
+	<tr>
+		<th></th>
+		{% for project in Project %}
+			<th>{{project}}</th>
+		{% endfor %}
+	</tr>
+	{% for employee in Employee %}
+	<tr>
+		<td>{{employee}}</td>
+		{%for project in Project%}
+			{% for hour_report in Hours_report %}
+				{%if hour_report.Project_id == project.id and hour_report.Employee_id == employee.id%}
+				<td>{{hour_report.Hours}}</td>
 
-	{% for employee in project.Employee.all %}
-		<td>{{ employee }}</td>
-	{% empty %}
-		<p>There are no Employees assigned to this project right now.</p>
+				{%endif%}
+			{% endfor %}
+
+		{% endfor %}
+	</tr>
 	{% endfor %}
 
-
-	<form action = "{% url 'reports:projects' %}">
-		<input type = "submit" value = 'Back'/>	
-	</form>
-
-	<form action = "{% url 'reports:edit' project.id %}">
-		<input type = "submit" value = 'Add employee to project'/>	
-	</form>
-</body>
+<table>

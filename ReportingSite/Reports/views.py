@@ -3,8 +3,10 @@ from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+import calendar
 
-from Reports.models import Employee, Project
+
+from Reports.models import Employee, Project, Hours_report
 
 class ProjectsView(generic.ListView):
 	template_name = 'Reports/projects.html'
@@ -13,12 +15,20 @@ class ProjectsView(generic.ListView):
 	def get_queryset(self):
 		return Project.objects.all()
 
-class DetailView(generic.DetailView):
-	model = Project
+class DetailView(generic.ListView):
+	
 	template_name = 'Reports/detail.html'
 
-	context_object_name = 'project'
+	context_object_name = 'Project'
 
+	def get_context_data(self, **kwargs):
+		ctx = super(DetailView, self).get_context_data(**kwargs)
+		ctx['Employee'] = Employee.objects.all()
+		ctx['Hours_report'] = Hours_report.objects.all().order_by('Project')
+		return ctx
+
+	def get_queryset(self):
+		return Project.objects.all()
 	#def get_queryset(self):
 	#	weeks = {'4':'2014-10-01','3':'2014-10-14'}
 
@@ -35,13 +45,28 @@ class EditView(generic.DetailView):
 		ctx['employee_list'] = Employee.objects.all()
 		return ctx
 
-def Submit(request, project_id):
-	p = get_object_or_404(Project, pk = project_id)
-	choices = p.Employee.get(pk=request.POST['employee'])
-	for choice in choices:
-		project.Employee.add(choice)
-	return HttpResponseRedirect(reverse('reports:edit', args=(project_id,)))
-#def get_week(request, year, month, day):
+class MonthView(generic.ListView):
+	template_name = 'Reports/month.html'
+	months = [calendar.month_name[i] for i in range(1, 13)]
+	context_object_name ='Month_list'
+	
+	def get_queryset(self):
+		return self.months
+
+
+# def Submit(request, project_id):
+# 	project = Project.objects.get(pk=project_id)
+# 	choice_list = []
+# 	if request.POST['employee']:
+# 		for key in request.POST['employee']:
+# 			choice_list.append(key)
+# 		for choice in choice_list:
+# 			project.Employee.add(choice)
+# 			project.save()
+# 		return HttpResponseRedirect(reverse('reports:edit',args=(project_id,)))
+
+
+# def get_week(request, year, month, day):
 #	date = "{}-{}-{}".format(year,month,day)
 
 #	hours = Hours_report.objects.filter(Week_of=date)
@@ -49,3 +74,4 @@ def Submit(request, project_id):
 #	output={'hours':hours}
 
 #	return render()
+

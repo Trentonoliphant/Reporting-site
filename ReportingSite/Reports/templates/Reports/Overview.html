@@ -1,23 +1,37 @@
+<h1> Overview of all Projects and Employees </h1>
+
+
 <table border = '1'>
 	<tr>
 		<th></th>
+		<td></td>
 		{% for project in Project %}
 			<th>{{project}}</th>
 		{% endfor %}
+		<td>Total Hours</td>
 	</tr>
 	{% for employee in Employee %}
 	<tr>
 		<td>{{employee}}</td>
+		<td>{{employee.Available_hours}}</td>
+		
 		{%for project in Project%}
 			{% for hour_report in Hours_report %}
 				{%if hour_report.Project_id == project.id and hour_report.Employee_id == employee.id%}
+				
 				<td>{{hour_report.Hours}}</td>
 
 				{%endif%}
 			{% endfor %}
-
 		{% endfor %}
+		<td>{{employee.calculate_worked_hours}}</td>
 	</tr>
 	{% endfor %}
-
+	<tr>
+		<td></td>
+		<td></td>
+		{% for project in Project %}
+			<td><strong>{{project.calculate_total_hours}}</strong></td>
+		{% endfor %}
+	</tr>
 <table>
